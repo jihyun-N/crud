@@ -7,6 +7,7 @@ const App = () => {
     title: "",
   });
 
+  //조회 함수
   const fetchTodos = async () => {
     const { data } = await axios.get("http://localhost:4001/todos");
     // yarn json-server --watch db.json --port 4001
@@ -14,10 +15,21 @@ const App = () => {
     setTodos(data);
   };
 
+  // 추가 함수
   const onSubmitHandler = async () => {
     await axios.post("http://localhost:4001/todos", inputValue);
 
     setTodos([...todos, inputValue]);
+  };
+
+  // 삭제 함수
+  const onClickDeleteButtonHandler = async (Id) => {
+    await axios.delete(`http://localhost:4001/todos/${Id}`);
+    setTodos(
+      todos.filter((item) => {
+        return item.id !== todos.id;
+      })
+    );
   };
 
   useEffect(() => {
@@ -54,6 +66,10 @@ const App = () => {
         return (
           <div key={item.id}>
             {item.id} : {item.title}
+            &nbsp;
+            <button onClick={() => onClickDeleteButtonHandler(item.id)}>
+              삭제
+            </button>
           </div>
         );
       })}
