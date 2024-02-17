@@ -67,7 +67,10 @@ const App = () => {
           <div key={item.id}>
             {item.id} : {item.title}
             &nbsp;
-            <button onClick={() => onClickDeleteButtonHandler(item.id)}>
+            <button
+              type="button"
+              onClick={() => onClickDeleteButtonHandler(item.id)}
+            >
               삭제
             </button>
           </div>
