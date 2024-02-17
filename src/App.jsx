@@ -6,6 +6,8 @@ const App = () => {
   const [inputValue, setInputValue] = useState({
     title: "",
   });
+  const [targetId, setTargetId] = useState("");
+  const [contents, setContents] = useState("");
 
   //조회 함수
   const fetchTodos = async () => {
@@ -19,7 +21,7 @@ const App = () => {
   const onSubmitHandler = async () => {
     await axios.post("http://localhost:4001/todos", inputValue);
 
-    setTodos([...todos, inputValue]);
+    fetchTodos();
   };
 
   // 삭제 함수
@@ -32,12 +34,51 @@ const App = () => {
     );
   };
 
+  // 수정 함수
+  const onUpdateButtonClickHandler = async () => {
+    await axios.patch(`http://localhost:4001/todos/${targetId}`, {
+      title: contents,
+    });
+
+    setTodos(
+      todos.map((item) => {
+        if (item.id === targetId) {
+          return { ...item, title: contents };
+        } else {
+          return item;
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   return (
-    <div>
+    <>
+      <div>
+        {/* 수정 영역 */}
+        <input
+          type="text"
+          placeholder="아이디 수정"
+          value={targetId}
+          onChange={(e) => {
+            setTargetId(e.target.value);
+          }}
+        />
+        <input
+          type="text"
+          placeholder="내용 수정"
+          value={contents}
+          onChange={(e) => {
+            setContents(e.target.value);
+          }}
+        />
+        <button onClick={onUpdateButtonClickHandler}>수정</button>
+        <br />
+        <br />
+      </div>
       <div>
         {/* INPUT 영역 */}
         <form
@@ -67,13 +108,16 @@ const App = () => {
           <div key={item.id}>
             {item.id} : {item.title}
             &nbsp;
-            <button onClick={() => onClickDeleteButtonHandler(item.id)}>
+            <button
+              type="button"
+              onClick={() => onClickDeleteButtonHandler(item.id)}
+            >
               삭제
             </button>
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 
