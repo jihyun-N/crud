@@ -29,7 +29,7 @@ const App = () => {
     await axios.delete(`http://localhost:4001/todos/${id}`);
     setTodos(
       todos.filter((item) => {
-        return item.id !== todos.id;
+        return item.id !== id;
       })
     );
   };
