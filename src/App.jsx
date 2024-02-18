@@ -23,8 +23,8 @@ const App = () => {
   };
 
   // 삭제 함수
-  const onClickDeleteButtonHandler = async (Id) => {
-    await axios.delete(`http://localhost:4001/todos/${Id}`);
+  const onClickDeleteButtonHandler = async (id) => {
+    await axios.delete(`http://localhost:4001/todos/${id}`);
     setTodos(
       todos.filter((item) => {
         return item.id !== todos.id;
