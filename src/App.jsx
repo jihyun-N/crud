@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // axios import 합니다.
+import api from "./axios/api";
 
 const App = () => {
   const [todos, setTodos] = useState(null);
@@ -11,7 +11,7 @@ const App = () => {
 
   //조회 함수
   const fetchTodos = async () => {
-    const { data } = await axios.get("http://localhost:4001/todos");
+    const { data } = await api.get("/todos");
     // yarn json-server --watch db.json --port 4001
     console.log("data", data);
     setTodos(data);
@@ -19,14 +19,15 @@ const App = () => {
 
   // 추가 함수
   const onSubmitHandler = async () => {
-    await axios.post("http://localhost:4001/todos", inputValue);
+    await api.post("/todos", inputValue);
 
     fetchTodos();
   };
 
   // 삭제 함수
   const onClickDeleteButtonHandler = async (id) => {
-    await axios.delete(`http://localhost:4001/todos/${id}`);
+    await api.delete(`/todos/${id}`);
+
     setTodos(
       todos.filter((item) => {
         return item.id !== id;
@@ -36,7 +37,7 @@ const App = () => {
 
   // 수정 함수
   const onUpdateButtonClickHandler = async () => {
-    await axios.patch(`http://localhost:4001/todos/${targetId}`, {
+    await api.patch(`/todos/${targetId}`, {
       title: contents,
     });
 
